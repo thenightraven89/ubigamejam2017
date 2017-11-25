@@ -112,6 +112,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bearSpeed: 2
   bearChargeSpeed: 3
+  goldPooPrefab: {fileID: 114415914650141160, guid: e1230537f5dc4ea4aa39e2064f87ca57,
+    type: 2}
 --- !u!212 &212740604812245188
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -145,7 +147,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: b629a8438b6c981438d0f928d59969ea, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

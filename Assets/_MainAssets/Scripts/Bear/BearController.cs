@@ -8,6 +8,9 @@ public class BearController : MonoBehaviour
     public float bearSpeed = 2f;
     public float bearChargeSpeed = 3f;
 
+    [Header("Bear stuff but this time it's references")]
+    public GoldPoo goldPooPrefab;
+
     //patrol vars
     private Vector3 patrolDest;
     private Vector3 initPos;
@@ -76,6 +79,7 @@ public class BearController : MonoBehaviour
     public void PoopGold()
     {
         print("<color=#DFEC00C6>pooping gold</color>");
+        Instantiate(goldPooPrefab, transform.position,Quaternion.identity);
     }
     //debug
     private void OnDrawGizmos()
