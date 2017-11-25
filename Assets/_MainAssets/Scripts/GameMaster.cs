@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using XboxCtrlrInput;
 
 public class GameMaster : MonoBehaviour
 {
@@ -8,9 +9,9 @@ public class GameMaster : MonoBehaviour
 	void Start()
 	{
 		var newChar = Instantiate(_character);
-		newChar.GetComponent<Character>().Initialize(1);
+		newChar.GetComponent<Character>().Initialize(XboxController.First);
 
 		var newChar2 = Instantiate(_character);
-		newChar2.GetComponent<Character>().Initialize(2);
+		newChar2.GetComponent<Character>().Initialize(XboxController.Second);
 	}
 }

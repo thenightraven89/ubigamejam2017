@@ -1,12 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
+using XboxCtrlrInput;
 
 public class Character : MonoBehaviour
 {
-	private int _playerIndex;
-	private string _xaxisName;
-	private string _yaxisName;
-	private string _dashName;
 	private float _xaxis;
 	private float _yaxis;
 	private float _dashMultiplier;
@@ -20,12 +17,11 @@ public class Character : MonoBehaviour
 	private const float XSPEED = 0.05f;
 	private const float YSPEED = 0.05f;
 
-	public void Initialize(int playerIndex)
+	private XboxController _controller;
+
+	public void Initialize(XboxController controller)
 	{
-		_playerIndex = playerIndex;
-		_xaxisName = string.Format("xaxis_{0}", playerIndex);
-		_yaxisName = string.Format("yaxis_{0}", playerIndex);
-		_dashName = string.Format("dash_{0}", playerIndex);
+		_controller = controller;
 		_t = transform;
 		_dashMultiplier = 1f;
 		_state = CharacterState.Roaming;
@@ -33,8 +29,8 @@ public class Character : MonoBehaviour
 
 	void Update()
 	{
-		_xaxis = Input.GetAxis(_xaxisName);
-		_yaxis = Input.GetAxis(_yaxisName);
+		_xaxis = XCI.GetAxis(XboxAxis.LeftStickX, _controller);
+		_yaxis = XCI.GetAxis(XboxAxis.LeftStickY, _controller);
 		_baseSpeed = new Vector2(_xaxis, _yaxis).normalized;
 
 		switch (_state)
@@ -42,14 +38,27 @@ public class Character : MonoBehaviour
 			case CharacterState.Roaming:
 				_t.Translate(new Vector2(_baseSpeed.x * XSPEED * _dashMultiplier, _baseSpeed.y * YSPEED * _dashMultiplier));
 
-				if (Input.GetButtonDown(_dashName))
+				if (XCI.GetButtonDown(XboxButton.A, _controller))
 				{
 					Dash(DASH_DECAY, DASH_COOLDOWN);
 				}
+
+				if (XCI.GetButtonDown(XboxButton.B, _controller))
+				{
+					Deceive();
+				}
+				
 				break;
 
 			case CharacterState.Dashing:
 				_t.Translate(new Vector2(_baseSpeed.x * XSPEED * _dashMultiplier, _baseSpeed.y * YSPEED * _dashMultiplier));
+				break;
+
+			case CharacterState.Deceiving:
+				if (XCI.GetButtonUp(XboxButton.B, _controller))
+				{
+					Undeceive();
+				}
 				break;
 
 			default:
@@ -68,6 +77,18 @@ public class Character : MonoBehaviour
 		_state = CharacterState.Stunned;
 		_dashMultiplier = 1f;
 		StartCoroutine(StunCoroutine(duration));
+	}
+
+	public void Deceive()
+	{
+		_state = CharacterState.Deceiving;
+		GetComponent<SpriteRenderer>().color = Color.red;
+	}
+
+	public void Undeceive()
+	{
+		_state = CharacterState.Roaming;
+		GetComponent<SpriteRenderer>().color = Color.white;
 	}
 
 	private IEnumerator DashCoroutine(float decay, float cooldown)
