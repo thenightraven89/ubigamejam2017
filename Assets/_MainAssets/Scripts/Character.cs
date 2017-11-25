@@ -11,9 +11,8 @@ public class Character : MonoBehaviour
 	private float _yaxis;
 	private float _dashMultiplier;
 	private Transform _t;
-	private bool _isStunned;
 	private Vector2 _baseSpeed;
-	private bool _dashAvailable;
+	private CharacterState _state;
 
 	private const float DASH_COOLDOWN = 3f;
 	private const float DASH_MULTIPLIER_MAX = 3f;
@@ -28,9 +27,8 @@ public class Character : MonoBehaviour
 		_yaxisName = string.Format("yaxis_{0}", playerIndex);
 		_dashName = string.Format("dash_{0}", playerIndex);
 		_t = transform;
-		_isStunned = false;
 		_dashMultiplier = 1f;
-		_dashAvailable = true;
+		_state = CharacterState.Roaming;
 	}
 
 	void Update()
@@ -39,28 +37,41 @@ public class Character : MonoBehaviour
 		_yaxis = Input.GetAxis(_yaxisName);
 		_baseSpeed = new Vector2(_xaxis, _yaxis).normalized;
 
-		if (!_isStunned)
+		switch (_state)
 		{
-			_t.Translate(new Vector2(_baseSpeed.x * XSPEED * _dashMultiplier, _baseSpeed.y * YSPEED * _dashMultiplier));
+			case CharacterState.Roaming:
+				_t.Translate(new Vector2(_baseSpeed.x * XSPEED * _dashMultiplier, _baseSpeed.y * YSPEED * _dashMultiplier));
 
-			if (Input.GetButtonDown(_dashName) && _dashAvailable)
-			{
-				StartCoroutine(DashCoroutine(DASH_DECAY, DASH_COOLDOWN));
-			}
+				if (Input.GetButtonDown(_dashName))
+				{
+					Dash(DASH_DECAY, DASH_COOLDOWN);
+				}
+				break;
+
+			case CharacterState.Dashing:
+				_t.Translate(new Vector2(_baseSpeed.x * XSPEED * _dashMultiplier, _baseSpeed.y * YSPEED * _dashMultiplier));
+				break;
+
+			default:
+				break;
 		}
+	}
+
+	public void Dash(float decay, float cooldown)
+	{
+		_state = CharacterState.Dashing;
+		StartCoroutine(DashCoroutine(DASH_DECAY, DASH_COOLDOWN));
 	}
 
 	public void Stun(float duration)
 	{
-		StopAllCoroutines();
+		_state = CharacterState.Stunned;
 		_dashMultiplier = 1f;
-		_dashAvailable = true;
 		StartCoroutine(StunCoroutine(duration));
 	}
 
 	private IEnumerator DashCoroutine(float decay, float cooldown)
 	{
-		_dashAvailable = false;
 		_dashMultiplier = DASH_MULTIPLIER_MAX;
 		float t = 0f;
 		while (t < decay)
@@ -70,13 +81,23 @@ public class Character : MonoBehaviour
 			t += Time.deltaTime;
 		}
 		yield return new WaitForSeconds(cooldown);
-		_dashAvailable = true;
+		_state = CharacterState.Roaming;
 	}
 
 	private IEnumerator StunCoroutine(float duration)
 	{
-		_isStunned = true;
 		yield return new WaitForSeconds(duration);
-		_isStunned = false;
+		_state = CharacterState.Roaming;
+	}
+
+	public enum CharacterState
+	{
+		Nada,
+		Roaming,
+		Dashing,
+		Deceiving,
+		Mining,
+		Stunned,
+		Dead
 	}
 }
