@@ -93,7 +93,7 @@ public class BearController : MonoBehaviour
     public bool ShouldPoo()
     {
         if (pooList.Count > maxPooCount) return false;
-        if (cooldownBetweenPoos >= currentPooCd) return false;
+        if (cooldownBetweenPoos > currentPooCd) return false;
         return true;
     }
 
