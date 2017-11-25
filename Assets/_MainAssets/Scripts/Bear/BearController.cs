@@ -81,6 +81,12 @@ public class BearController : MonoBehaviour
         print("<color=#DFEC00C6>pooping gold</color>");
         Instantiate(goldPooPrefab, transform.position,Quaternion.identity);
     }
+
+    public void LookConcerned()
+    {
+        print("<color=#DFEC00C6>looking concerned</color>");
+    }
+
     //debug
     private void OnDrawGizmos()
     {

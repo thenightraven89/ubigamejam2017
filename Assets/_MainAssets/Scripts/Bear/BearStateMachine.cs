@@ -46,7 +46,7 @@ public class PatrolState : BearState
         base.UpdateState();
         if(bear.Patrol())
         {
-            bsm.SwitchState(bsm.poopGoldState);
+            bsm.SwitchState(bsm.lookConcernedState);
         }
     }
 
@@ -84,11 +84,40 @@ public class PoopGoldState : BearState
     }
 }
 
+public class LookConcernedClass : BearState
+{
+    private float stateDuration = 3f;
+    private float stateDurationProgress = 0f;
+    public LookConcernedClass(BearStateMachine sm, BearController ber) : base (sm, ber)
+    {
+
+    }
+
+    public override void EnterState()
+    {
+        base.EnterState();
+        bear.LookConcerned();
+        stateDurationProgress = 0f;
+        //let 's get a random point to patrol to
+    }
+
+    public override void UpdateState()
+    {
+        base.UpdateState();
+        stateDurationProgress += Time.deltaTime;
+        if (stateDurationProgress >= stateDuration)
+        {
+            bsm.SwitchState(bsm.patrolState);
+        }
+    }
+}
+
 public class BearStateMachine : StateMachine
 {
     public StartState startState;
     public PatrolState patrolState;
     public PoopGoldState poopGoldState;
+    public LookConcernedClass lookConcernedState;
 
     public void InitStateMachine(BearController ber)
     {
@@ -96,6 +125,7 @@ public class BearStateMachine : StateMachine
         startState = new StartState(this, ber);
         patrolState = new PatrolState(this, ber);
         poopGoldState = new PoopGoldState(this, ber);
+        lookConcernedState = new LookConcernedClass(this, ber);
 
         currentState = startState;
         currentState.EnterState();
