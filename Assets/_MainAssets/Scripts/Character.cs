@@ -104,18 +104,24 @@ public class Character : MonoBehaviour
 		// PLAY DEAD ANIMATION GETS TRIGGERED HERE
 	}
 
+	private Coroutine _eatDaPoopooCoroutine;
+
 	public void EatDaPoopoo(RaycastHit2D poopoo)
 	{
 		_t.position = new Vector3(poopoo.transform.position.x, poopoo.transform.position.y, _t.position.z);
 		_state = CharacterState.Mining;
 		GetComponent<SpriteRenderer>().color = Color.yellow;
-		StartCoroutine(EatDaPoopooCoroutine(poopoo.transform.GetComponent<GoldPoo>(), CHOMP_TIME));
+		_eatDaPoopooCoroutine = StartCoroutine(EatDaPoopooCoroutine(poopoo.transform.GetComponent<GoldPoo>(), CHOMP_TIME));
 	}
 
 	public void Interrupt()
 	{
 		_state = CharacterState.Roaming;
 		GetComponent<SpriteRenderer>().color = Color.white;
+		if (_eatDaPoopooCoroutine != null)
+		{
+			StopCoroutine(_eatDaPoopooCoroutine);
+		}
 	}
 
 	private IEnumerator DashCoroutine(float decay, float cooldown)
@@ -142,6 +148,7 @@ public class Character : MonoBehaviour
 	{
 		while (_state == CharacterState.Mining && poopoo != null && poopoo.PooGold > 0)
 		{
+			yield return new WaitForSeconds(chompTime);
 			poopoo.PooGold--;
 			UIManager.Instance.UpdateScore(_controller, 1);
 
@@ -151,7 +158,6 @@ public class Character : MonoBehaviour
 			}
 			
 			// EAT POOPOO ANIMATION GETS TRIGGERED HERE
-			yield return new WaitForSeconds(chompTime);
 		}
 
 		Interrupt();

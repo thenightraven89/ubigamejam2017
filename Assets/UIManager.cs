@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour {
 	{
 		_scores[(int)controller - 1] += diff;
 		_scoreTexts[(int)controller - 1].text = _scores[(int)controller - 1].ToString();
+		_scoreTexts[(int)controller - 1].rectTransform.localScale = Vector3.one;
 		_scoreTexts[(int)controller - 1].rectTransform.DOPunchScale(new Vector2(1f, 1f), 0.25f);
 	}
 
