@@ -2,15 +2,15 @@
 
 public class GameMaster : MonoBehaviour
 {
-    // Use this for initialization
-    void Start()
-    {
+	public GameObject _character;
 
-    }
+	// Use this for initialization
+	void Start()
+	{
+		var newChar = Instantiate(_character);
+		newChar.GetComponent<Character>().Initialize(1);
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+		var newChar2 = Instantiate(_character);
+		newChar2.GetComponent<Character>().Initialize(2);
+	}
 }
