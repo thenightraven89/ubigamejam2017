@@ -11,7 +11,7 @@ public class Character : MonoBehaviour
 	private Vector2 _baseSpeed;
 	private CharacterState _state;
 
-	private const float DASH_COOLDOWN = 3f;
+	private const float DASH_COOLDOWN = 1f;
 	private const float DASH_MULTIPLIER_MAX = 3f;
 	private const float DASH_DECAY = 0.25f; //decay in seconds
 	private const float XSPEED = 0.05f;
@@ -47,6 +47,15 @@ public class Character : MonoBehaviour
 				{
 					Deceive();
 				}
+
+				if (XCI.GetButtonDown(XboxButton.Y, _controller))
+				{
+					var hit = Physics2D.CircleCastAll(_t.position, 0.5f, Vector2.up);
+					if (hit.Length > 0)
+					{
+						EatDaPoopoo(hit[0]);
+					}					
+				}
 				
 				break;
 
@@ -57,7 +66,14 @@ public class Character : MonoBehaviour
 			case CharacterState.Deceiving:
 				if (XCI.GetButtonUp(XboxButton.B, _controller))
 				{
-					Undeceive();
+					Interrupt();
+				}
+				break;
+
+			case CharacterState.Mining:
+				if (XCI.GetButtonUp(XboxButton.Y, _controller))
+				{
+					Interrupt();
 				}
 				break;
 
@@ -85,7 +101,14 @@ public class Character : MonoBehaviour
 		GetComponent<SpriteRenderer>().color = Color.red;
 	}
 
-	public void Undeceive()
+	public void EatDaPoopoo(RaycastHit2D poopoo)
+	{
+		_t.position = new Vector3(poopoo.transform.position.x, poopoo.transform.position.y, _t.position.z);
+		_state = CharacterState.Mining;
+		GetComponent<SpriteRenderer>().color = Color.yellow;
+	}
+
+	public void Interrupt()
 	{
 		_state = CharacterState.Roaming;
 		GetComponent<SpriteRenderer>().color = Color.white;
