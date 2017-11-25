@@ -109,6 +109,7 @@ public class BearController : MonoBehaviour
         } while (dist > minDistanceBetweenPoos);
 
         startTime = Time.time;
+        journeyLength = Vector3.Distance(initPos, pooDest);
     }
 
     //returns true if arrived at patrol destination
@@ -140,8 +141,8 @@ public class BearController : MonoBehaviour
 
     public void LookConcerned()
     {
-        print("<color=#DFEC00C6>looking concerned</color>");
         currentPooCd++;
+        print("<color=#DFEC00C6>looking concerned:</color> " + currentPooCd);        
     }
 
     //callbacks
