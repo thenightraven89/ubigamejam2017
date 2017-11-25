@@ -14,7 +14,7 @@ public class State : iState
 {
     public virtual void EndState()
     {
-        Debug.Log("Ending State: " + this.GetType().ToString());
+        //Debug.Log("Ending State: " + this.GetType().ToString());
     }
 
     public virtual void EnterState()
@@ -24,7 +24,7 @@ public class State : iState
 
     public virtual void UpdateState()
     {
-        Debug.Log("Updating State: " + this.GetType().ToString());
+        //Debug.Log("Updating State: " + this.GetType().ToString());
     }
 }
 
@@ -40,7 +40,10 @@ public class StateMachine
 
     public virtual void UpdateState()
     {
-        if (currentState == null) return;
+        if (currentState == null)
+        {
+            return;
+        }
         currentState.UpdateState();
     }
 
