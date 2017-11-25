@@ -11,11 +11,12 @@ public class Character : MonoBehaviour
 	private Vector2 _baseSpeed;
 	private CharacterState _state;
 
-	private const float DASH_COOLDOWN = 1f;
+	private const float DASH_COOLDOWN = 0.5f;
 	private const float DASH_MULTIPLIER_MAX = 3f;
 	private const float DASH_DECAY = 0.25f; //decay in seconds
 	private const float XSPEED = 0.05f;
 	private const float YSPEED = 0.05f;
+	private const float CHOMP_TIME = 0.5f;
 
 	private XboxController _controller;
 
@@ -54,7 +55,7 @@ public class Character : MonoBehaviour
 					if (hit.Length > 0)
 					{
 						EatDaPoopoo(hit[0]);
-					}					
+					}
 				}
 				
 				break;
@@ -71,6 +72,7 @@ public class Character : MonoBehaviour
 				break;
 
 			case CharacterState.Mining:
+
 				if (XCI.GetButtonUp(XboxButton.Y, _controller))
 				{
 					Interrupt();
@@ -99,6 +101,7 @@ public class Character : MonoBehaviour
 	{
 		_state = CharacterState.Deceiving;
 		GetComponent<SpriteRenderer>().color = Color.red;
+		// PLAY DEAD ANIMATION GETS TRIGGERED HERE
 	}
 
 	public void EatDaPoopoo(RaycastHit2D poopoo)
@@ -106,6 +109,7 @@ public class Character : MonoBehaviour
 		_t.position = new Vector3(poopoo.transform.position.x, poopoo.transform.position.y, _t.position.z);
 		_state = CharacterState.Mining;
 		GetComponent<SpriteRenderer>().color = Color.yellow;
+		StartCoroutine(EatDaPoopooCoroutine(poopoo.transform.GetComponent<GoldPoo>(), CHOMP_TIME));
 	}
 
 	public void Interrupt()
@@ -132,6 +136,25 @@ public class Character : MonoBehaviour
 	{
 		yield return new WaitForSeconds(duration);
 		_state = CharacterState.Roaming;
+	}
+
+	private IEnumerator EatDaPoopooCoroutine(GoldPoo poopoo, float chompTime)
+	{
+		while (_state == CharacterState.Mining && poopoo != null && poopoo.PooGold > 0)
+		{
+			poopoo.PooGold--;
+			UIManager.Instance.UpdateScore(_controller, 1);
+
+			if (poopoo.PooGold == 0)
+			{
+				poopoo.ClearPoo();
+			}
+			
+			// EAT POOPOO ANIMATION GETS TRIGGERED HERE
+			yield return new WaitForSeconds(chompTime);
+		}
+
+		Interrupt();
 	}
 
 	public enum CharacterState
