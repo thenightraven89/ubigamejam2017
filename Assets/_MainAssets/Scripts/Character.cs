@@ -20,8 +20,9 @@ public class Character : MonoBehaviour
 
 	private XboxController _controller;
 
-	public void Initialize(XboxController controller)
+	public void Initialize(XboxController controller, Sprite sprite)
 	{
+		GetComponent<SpriteRenderer>().sprite = sprite;
 		_controller = controller;
 		_t = transform;
 		_dashMultiplier = 1f;
@@ -37,6 +38,12 @@ public class Character : MonoBehaviour
 		switch (_state)
 		{
 			case CharacterState.Roaming:
+
+
+				if ((Mathf.Sign(_baseSpeed.x) != - Mathf.Sign(_t.localScale.x)) && _baseSpeed.x != 0f)
+				{
+					_t.localScale = new Vector3(-_t.localScale.x, 1f, 1f);
+				}
 				_t.Translate(new Vector2(_baseSpeed.x * XSPEED * _dashMultiplier, _baseSpeed.y * YSPEED * _dashMultiplier));
 
 				if (XCI.GetButtonDown(XboxButton.A, _controller))
