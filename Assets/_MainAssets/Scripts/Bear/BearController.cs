@@ -8,16 +8,25 @@ public class BearController : MonoBehaviour
     public float bearSpeed = 2f;
     public float bearHasToPooSpeed = 2.5f;
     public float bearChargeSpeed = 3f;
-
+    public float bearReach = 5f;
+    [Header("Bear poo stuff")]
     public float minDistanceBetweenPoos = 5f;
     public int maxPooCount = 5;
     public int cooldownBetweenPoos = 6;
 
     [Header("Bear stuff but this time it's references")]
     public GoldPoo goldPooPrefab;
+    public ConeContoller coneController;
 
     //poos
-    private List<GoldPoo> pooList; 
+    private List<GoldPoo> pooList;
+
+    //poo occurence
+    private int currentPooCd = 0;
+
+    //chase
+    private Transform target;
+    private bool isChasing = false;
 
     //patrol vars
     private Vector3 patrolDest;
@@ -25,9 +34,6 @@ public class BearController : MonoBehaviour
     private Vector3 initPos;
     private float startTime;
     private float journeyLength;
-
-    //poo occurence
-    private int currentPooCd = 0;
 
     //we need this to get valid positions for patrolling
     private LevelScript ls;
@@ -45,11 +51,13 @@ public class BearController : MonoBehaviour
     private void OnEnable()
     {
         GoldPoo.onPooCleared += HandlePooCleaned;
+        coneController.colDet.onPlayerSpotted += HandlePlayerSpotted;
     }
 
     private void OnDisable()
     {
         GoldPoo.onPooCleared -= HandlePooCleaned;
+        coneController.colDet.onPlayerSpotted -= HandlePlayerSpotted;
     }
 
     // Update is called once per frame
@@ -145,11 +153,50 @@ public class BearController : MonoBehaviour
         print("<color=#DFEC00C6>looking concerned:</color> " + currentPooCd);        
     }
 
+    //chase
+    public void StartChase()
+    {
+        Debug.Log("starting chase");
+    }
+
+    public bool Chase()
+    {
+        isChasing = true;
+        Vector3 dirVec = new Vector3(transform.position.x - target.transform.position.x, transform.position.y - target.transform.position.y, transform.position.z - target.transform.position.z);
+        dirVec.Normalize();
+        transform.Translate(-dirVec * bearChargeSpeed * Time.deltaTime);
+        if (Vector3.Distance(transform.position,target.position) < bearReach) return true;
+        return false;
+    }
+
+    //catch
+
+    public int EvaluateCatch()
+    {
+        isChasing = false;
+        return 0; //always molests for now
+    }
+
+    //molest
+    public void MolestPlayer()
+    {
+        Debug.Log("mollesting target player");
+    }
+
     //callbacks
     private void HandlePooCleaned(GoldPoo poo)
     {
         print("found poo. Removing from list");
         pooList.Remove(poo);
+    }
+
+    private void HandlePlayerSpotted(Collider2D col)
+    {
+        if (isChasing)
+            return;
+        target = col.transform;
+        bsm.SendInterrupt(BearStateMachine.PLAYER_SPOTTED);
+        print("SENDING INTERRUPT");
     }
 
     //debug
