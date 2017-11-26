@@ -5,6 +5,9 @@ using XboxCtrlrInput;
 
 public class Character : MonoBehaviour
 {
+	public AudioClip _dashAudio;
+	public AudioClip _eatAudio;
+
 	private float _xaxis;
 	private float _yaxis;
 	private float _dashMultiplier;
@@ -27,6 +30,8 @@ public class Character : MonoBehaviour
 
 	public SpriteRenderer _spriteRenderer;
 
+	private AudioSource _source;
+
     public CharacterState GetCharState
     {
         get { return _state; }
@@ -42,6 +47,7 @@ public class Character : MonoBehaviour
 		_dashMultiplier = 1f;
 		_state = CharacterState.Roaming;
 		GetComponent<Animator>().Play("Idle");
+		_source = FindObjectOfType<AudioSource>();
 	}
 
 	void Update()
@@ -160,6 +166,7 @@ public class Character : MonoBehaviour
 	public void Dash(float decay, float cooldown)
 	{
 		_state = CharacterState.Dashing;
+		_source.PlayOneShot(_dashAudio);
 		StartCoroutine(DashCoroutine(DASH_DECAY, DASH_COOLDOWN));
 	}
 
@@ -224,7 +231,7 @@ public class Character : MonoBehaviour
 	{
 		while (_state == CharacterState.Mining && poopoo != null && poopoo.PooGold > 0)
 		{
-
+			_source.PlayOneShot(_eatAudio);
 
 			yield return new WaitForSeconds(chompTime);
 			poopoo.PooGold--;
