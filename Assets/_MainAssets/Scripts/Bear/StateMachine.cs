@@ -8,13 +8,14 @@ public interface iState
     void EnterState();
     void UpdateState();
     void EndState();
+    void SendInterrupt(string interruptName);
 }
 
 public class State : iState
 {
     public virtual void EndState()
     {
-        //Debug.Log("Ending State: " + this.GetType().ToString());
+        Debug.Log("Ending State: " + this.GetType().ToString());
     }
 
     public virtual void EnterState()
@@ -25,6 +26,11 @@ public class State : iState
     public virtual void UpdateState()
     {
         //Debug.Log("Updating State: " + this.GetType().ToString());
+    }
+
+    public virtual void SendInterrupt(string interruptName)
+    {
+
     }
 }
 
@@ -49,6 +55,7 @@ public class StateMachine
 
     public virtual void SwitchState(State nextState)
     {
+        Debug.Log("switching states");
         //let us exit current state
         currentState.EndState();
         nextState.EnterState();

@@ -113,11 +113,11 @@ public class PoopGoldState : BearState
     }
 }
 
-public class LookConcernedClass : BearState
+public class LookConcernedState : BearState
 {
     private float stateDuration = 3f;
     private float stateDurationProgress = 0f;
-    public LookConcernedClass(BearStateMachine sm, BearController ber) : base(sm, ber)
+    public LookConcernedState(BearStateMachine sm, BearController ber) : base(sm, ber)
     {
 
     }
@@ -127,7 +127,6 @@ public class LookConcernedClass : BearState
         base.EnterState();
         bear.LookConcerned();
         stateDurationProgress = 0f;
-        //let 's get a random point to patrol to
     }
 
     public override void UpdateState()
@@ -144,13 +143,108 @@ public class LookConcernedClass : BearState
     }
 }
 
+public class ChaseState : BearState
+{
+    public ChaseState(BearStateMachine sm, BearController ber) : base(sm, ber)
+    {
+
+    }
+
+    public override void EnterState()
+    {
+        base.EnterState();
+        bear.StartChase();
+    }
+
+    public override void UpdateState()
+    {
+        base.UpdateState();
+        if(bear.Chase()) // if player was caught
+        {
+            bsm.SwitchState(bsm.catchState);
+        }
+    }
+}
+
+public class CatchState : BearState
+{
+    public CatchState(BearStateMachine sm, BearController ber) : base(sm, ber)
+    {
+
+    }
+
+    public override void EnterState()
+    {
+        base.EnterState();
+    }
+
+    public override void UpdateState()
+    {
+        base.UpdateState();
+        int val = bear.EvaluateCatch(); //0 caught, 1 feigned death but seen, 2 - feigned death but not seen
+        switch (val)
+        {
+            case 0:
+                bsm.SwitchState(bsm.molestState);
+                break;
+            case 1:
+                bsm.SwitchState(bsm.molestState);
+                break;
+            case 2:
+                bsm.SwitchState(bsm.patrolState);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+public class MolestState : BearState
+{
+    private float stateDuration = 1f;
+    private float stateDurationProgress = 0f;
+
+    public MolestState(BearStateMachine sm, BearController ber) : base(sm, ber)
+    {
+
+    }
+
+    public override void EnterState()
+    {
+        base.EnterState();
+        bear.MolestPlayer();
+        stateDurationProgress = 0f;
+    }
+
+    public override void UpdateState()
+    {
+        base.UpdateState();
+
+        stateDurationProgress += Time.deltaTime;
+        if (stateDurationProgress >= stateDuration)
+        {
+            if (!bear.ShouldPoo())
+                bsm.SwitchState(bsm.patrolState);
+            else
+                bsm.SwitchState(bsm.travelToPooPlaceState);
+        }
+    }
+}
+
 public class BearStateMachine : StateMachine
 {
+    //interrupts
+    public static string PLAYER_SPOTTED = "playerSpotted";
+
+    //states
     public StartState startState;
     public PatrolState patrolState;
     public TravelToPooPlaceState travelToPooPlaceState;
     public PoopGoldState poopGoldState;
-    public LookConcernedClass lookConcernedState;
+    public LookConcernedState lookConcernedState;
+    public ChaseState chaseState;
+    public CatchState catchState;
+    public MolestState molestState;
 
     public void InitStateMachine(BearController ber)
     {
@@ -159,9 +253,18 @@ public class BearStateMachine : StateMachine
         patrolState = new PatrolState(this, ber);
         travelToPooPlaceState = new TravelToPooPlaceState(this, ber);
         poopGoldState = new PoopGoldState(this, ber);
-        lookConcernedState = new LookConcernedClass(this, ber);
+        lookConcernedState = new LookConcernedState(this, ber);
+        chaseState = new ChaseState(this, ber);
+        catchState = new CatchState(this, ber);
+        molestState = new MolestState(this, ber);
 
         currentState = startState;
         currentState.EnterState();
+    }
+
+    public void SendInterrupt(string interruptName)
+    {
+        if (interruptName == PLAYER_SPOTTED)
+            SwitchState(chaseState); // hacked for now
     }
 }
