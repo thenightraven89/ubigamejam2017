@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using XboxCtrlrInput;
 
@@ -49,6 +50,8 @@ public class Character : MonoBehaviour
 		_yaxis = XCI.GetAxis(XboxAxis.LeftStickY, _controller);
 		_baseSpeed = new Vector2(_xaxis, _yaxis).normalized;
 
+		_pushedSpeed /= 2f;
+
 		switch (_state)
 		{
 			case CharacterState.Roaming:
@@ -58,7 +61,8 @@ public class Character : MonoBehaviour
 				{
 					_t.localScale = new Vector3(-_t.localScale.x, 1f, 1f);
 				}
-				_t.Translate(new Vector2(_baseSpeed.x * XSPEED * _dashMultiplier, _baseSpeed.y * YSPEED * _dashMultiplier));
+
+				_t.Translate(new Vector2(_baseSpeed.x * XSPEED * _dashMultiplier, _baseSpeed.y * YSPEED * _dashMultiplier) + _pushedSpeed);
 
 				if (XCI.GetButtonDown(XboxButton.A, _controller))
 				{
@@ -76,6 +80,20 @@ public class Character : MonoBehaviour
 					if (hit.Length > 0)
 					{
 						EatDaPoopoo(hit[0]);
+					}
+				}
+
+				if (XCI.GetButtonDown(XboxButton.X, _controller))
+				{
+					var hits = Physics2D.CircleCastAll(_t.position, 0.5f, Vector2.up, 0.5f, 1 << LayerMask.NameToLayer("Player"));
+					foreach (var h in hits)
+					{
+						if (h.transform != _t)
+						{
+							var other = h.transform.GetComponent<Character>();
+							other.ReceiveStun(2f);
+							other.ReceivePush(other.transform.position - _t.position);
+						}
 					}
 				}
 				
@@ -109,6 +127,9 @@ public class Character : MonoBehaviour
 					_state = CharacterState.Roaming;
 					GetComponent<Collider2D>().enabled = true;
 				}
+
+				_t.Translate(_pushedSpeed);
+
 				break;
 
 			default:
@@ -120,6 +141,13 @@ public class Character : MonoBehaviour
 	{
 		_state = CharacterState.Dashing;
 		StartCoroutine(DashCoroutine(DASH_DECAY, DASH_COOLDOWN));
+	}
+
+	private Vector2 _pushedSpeed;
+
+	public void ReceivePush(Vector3 push)
+	{
+		_pushedSpeed = push.normalized * 3f;
 	}
 
 	public void ReceiveStun(float duration)
