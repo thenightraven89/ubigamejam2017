@@ -201,7 +201,7 @@ public class CatchState : BearState
 
 public class MolestState : BearState
 {
-    private float stateDuration = 1f;
+    private float stateDuration = 3f;
     private float stateDurationProgress = 0f;
 
     public MolestState(BearStateMachine sm, BearController ber) : base(sm, ber)

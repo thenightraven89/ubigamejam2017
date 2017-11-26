@@ -114,7 +114,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1973930882809800}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.37, y: 3.38, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4811287769262280}
@@ -205,10 +205,10 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -2.8849807, y: -2.8386674}
-  - {x: -0.5593636, y: 1.907464}
-  - {x: 2.586773, y: -0.8713908}
-  - {x: -2.8674502, y: -2.8386672}
+  - {x: 0.16117644, y: 0.20375025}
+  - {x: 2.130466, y: 4.4478807}
+  - {x: 4.854146, y: 1.9561783}
+  - {x: 0.2641449, y: 0.11626518}
 --- !u!114 &114176438289456164
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bearSpeed: 2
   bearHasToPooSpeed: 4
-  bearChargeSpeed: 4
+  bearChargeSpeed: 3.5
   bearReach: 1
   minDistanceBetweenPoos: 5
   maxPooCount: 5
@@ -256,6 +256,7 @@ MonoBehaviour:
   RedSprite: {fileID: 21300000, guid: a4cd3b5dba0f65b469b2ecb560920c8f, type: 3}
   sRend: {fileID: 212032153116899700}
   colDet: {fileID: 114176438289456164}
+  copilulubogdan: {fileID: 4811287769262280}
 --- !u!212 &212032153116899700
 SpriteRenderer:
   m_ObjectHideFlags: 1
