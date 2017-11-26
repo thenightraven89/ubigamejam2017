@@ -276,6 +276,7 @@ MonoBehaviour:
   _dashAudio: {fileID: 8300000, guid: 453f004ed03cdaf46b6d08a3426d3abd, type: 3}
   _eatAudio: {fileID: 8300000, guid: 668733660356c544198fa55a24953913, type: 3}
   _spriteRenderer: {fileID: 212249200605470890}
+  _stunEmoji: {fileID: 1389847318906460}
 --- !u!212 &212059633605085018
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -353,7 +354,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 74
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 274bb3599123e2849b79d7985244bf14, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
