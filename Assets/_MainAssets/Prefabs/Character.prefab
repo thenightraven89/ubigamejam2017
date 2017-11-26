@@ -196,6 +196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876ab820360a070479fd03c178b83310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dashAudio: {fileID: 8300000, guid: 453f004ed03cdaf46b6d08a3426d3abd, type: 3}
+  _eatAudio: {fileID: 8300000, guid: 668733660356c544198fa55a24953913, type: 3}
   _spriteRenderer: {fileID: 212249200605470890}
 --- !u!212 &212059633605085018
 SpriteRenderer:
