@@ -29,11 +29,14 @@ public class GameMaster : MonoBehaviour
 
 	public SpriteRenderer[] _playerImages;
 
+	private bool _gameStarted = false;
+
 	private void Update()
 	{
-		if (XCI.GetButtonDown(XboxButton.Start, XboxController.Any))
+		if (XCI.GetButtonDown(XboxButton.Start, XboxController.Any) && !_gameStarted)
 		{
 			StartGame();
+			_gameStarted = true;
 		}
 
 		if (XCI.GetButtonDown(XboxButton.A, XboxController.First))
