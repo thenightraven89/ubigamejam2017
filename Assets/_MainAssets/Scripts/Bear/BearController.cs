@@ -87,10 +87,12 @@ public class BearController : MonoBehaviour
         }
         bsm.InitStateMachine(this);
         isBsmInit = true;
+        coneController.EnableCone();
     }
 
     public void GetPatrolPoint()
     {
+        coneController.EnableCone();
         initPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         patrolDest = ls.GetValidPosForBearPatrol();
 
@@ -107,6 +109,7 @@ public class BearController : MonoBehaviour
 
     public void GetPooPoint()
     {
+        coneController.EnableCone();
         initPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         float dist = 0f;
 
@@ -180,7 +183,9 @@ public class BearController : MonoBehaviour
     //molest
     public void MolestPlayer()
     {
-        Debug.Log("mollesting target player");
+        Debug.Log("molesting target player");
+        coneController.DisableCone();
+        target.gameObject.SendMessage("ReceiveStun", 10f);
     }
 
     //callbacks
@@ -196,7 +201,6 @@ public class BearController : MonoBehaviour
             return;
         target = col.transform;
         bsm.SendInterrupt(BearStateMachine.PLAYER_SPOTTED);
-        print("SENDING INTERRUPT");
     }
 
     //debug

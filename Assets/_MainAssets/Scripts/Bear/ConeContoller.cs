@@ -12,7 +12,10 @@ public class ConeContoller : MonoBehaviour {
     public SpriteRenderer sRend;
     public ConeColliderDetector colDet;
 
-    Tweener rotator;
+    public Transform copilulubogdan;
+
+    public Transform target;
+    bool isFollowTarget = false;
     // Use this for initialization
     private void Awake()
     {
@@ -39,20 +42,49 @@ public class ConeContoller : MonoBehaviour {
         {
             RotateCone();
         }
+
+        if(isFollowTarget)
+        {
+            if(Vector3.Angle(transform.position, target.position) < 0)
+                transform.Rotate(0f, 0f, 1.5f);
+            else
+                transform.Rotate(0f, 0f, -1.5f);
+        }
 	}
+
+    public void DisableCone()
+    {
+        isFollowTarget = false;
+        colDet.gameObject.SetActive(false);
+        DOTween.Kill(transform);
+        CancelInvoke();
+    }
+
+    public void EnableCone()
+    {
+        colDet.gameObject.SetActive(true);
+        sRend.sprite = NormalSprite;
+        RotateCone();
+    }
 
     void RotateCone()
     {
-        transform.DORotate(new Vector3(UnityEngine.Random.Range(-360f, 360f), 0f, 0f), 1f);
+        transform.DOLocalRotate(new Vector3(0f, 0f, UnityEngine.Random.Range(-180f, 180f)), 1f);
+        Invoke("RotateCone", 1.5f);
     }
+
+
 
     private void HandlePlayerSpotted(Collider2D col)
     {
+        target = col.transform;
+        isFollowTarget = true;
         sRend.sprite = RedSprite;
         DOTween.Kill(transform);
+        CancelInvoke();
         //transform.LookAt(col.transform, Vector3.back);
-
+        //copilulubogdan.LookAt(col.transform, Vector3.forward);
         //float zAngle = Mathf.Acos(new Vector3(transform.position.x - col.transform.position.x, transform.position.y - col.transform.position.y, transform.position.z - col.transform.position.z).y);
-        //transform.DORotate(new Vector3(0f, 0f, zAngle), 1f);
+        //transform.Rotate(new Vector3(0f, 0f, zAngle));
     }
 }

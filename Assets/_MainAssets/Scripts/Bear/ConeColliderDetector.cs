@@ -20,6 +20,11 @@ public class ConeColliderDetector : MonoBehaviour {
         if (collision.tag == "Player")
         {
             print("found player");
+            if (collision.gameObject.GetComponent<Character>().GetCharState == Character.CharacterState.Deceiving)
+            {
+                print("butIsPlaying dead");
+                return;
+            }
             if (onPlayerSpotted != null)
                 onPlayerSpotted(collision);
             //sRend.sprite = RedSprite;

@@ -26,7 +26,12 @@ public class Character : MonoBehaviour
 
 	public SpriteRenderer _spriteRenderer;
 
-	public void Initialize(XboxController controller, Sprite sprite, Sprite deadSprite)
+    public CharacterState GetCharState
+    {
+        get { return _state; }
+    }
+
+    public void Initialize(XboxController controller, Sprite sprite, Sprite deadSprite)
 	{
 		_sprite = sprite;
 		_deadSprite = deadSprite;
@@ -102,7 +107,7 @@ public class Character : MonoBehaviour
 				if (_stunTime == 0f)
 				{
 					_state = CharacterState.Roaming;
-					GetComponent<Collider>().enabled = true;
+					GetComponent<Collider2D>().enabled = true;
 				}
 				break;
 
@@ -122,7 +127,7 @@ public class Character : MonoBehaviour
 		_state = CharacterState.Stunned;
 		_dashMultiplier = 1f;
 		_stunTime = duration;
-		GetComponent<Collider>().enabled = false;
+		GetComponent<Collider2D>().enabled = false;
 	}
 
 	public void Deceive()
