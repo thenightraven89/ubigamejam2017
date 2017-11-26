@@ -20,13 +20,21 @@ public class Character : MonoBehaviour
 
 	private XboxController _controller;
 
-	public void Initialize(XboxController controller, Sprite sprite)
+	private Sprite _sprite;
+	private Sprite _deadSprite;
+
+	public SpriteRenderer _spriteRenderer;
+
+	public void Initialize(XboxController controller, Sprite sprite, Sprite deadSprite)
 	{
-		GetComponent<SpriteRenderer>().sprite = sprite;
+		_sprite = sprite;
+		_deadSprite = deadSprite;
+		_spriteRenderer.sprite = _sprite;
 		_controller = controller;
 		_t = transform;
 		_dashMultiplier = 1f;
 		_state = CharacterState.Roaming;
+		GetComponent<Animator>().Play("Idle");
 	}
 
 	void Update()
@@ -74,6 +82,7 @@ public class Character : MonoBehaviour
 			case CharacterState.Deceiving:
 				if (XCI.GetButtonUp(XboxButton.B, _controller))
 				{
+					GetComponent<Animator>().Play("Idle");
 					Interrupt();
 				}
 				break;
@@ -82,6 +91,7 @@ public class Character : MonoBehaviour
 
 				if (XCI.GetButtonUp(XboxButton.Y, _controller))
 				{
+					GetComponent<Animator>().Play("Idle");
 					Interrupt();
 				}
 				break;
@@ -107,7 +117,8 @@ public class Character : MonoBehaviour
 	public void Deceive()
 	{
 		_state = CharacterState.Deceiving;
-		GetComponent<SpriteRenderer>().color = Color.red;
+		_spriteRenderer.sprite = _deadSprite;
+		GetComponent<Animator>().Play("faint");
 		// PLAY DEAD ANIMATION GETS TRIGGERED HERE
 	}
 
@@ -115,16 +126,16 @@ public class Character : MonoBehaviour
 
 	public void EatDaPoopoo(RaycastHit2D poopoo)
 	{
+		GetComponent<Animator>().Play("Eat");
 		_t.position = new Vector3(poopoo.transform.position.x, poopoo.transform.position.y, _t.position.z);
 		_state = CharacterState.Mining;
-		GetComponent<SpriteRenderer>().color = Color.yellow;
 		_eatDaPoopooCoroutine = StartCoroutine(EatDaPoopooCoroutine(poopoo.transform.GetComponent<GoldPoo>(), CHOMP_TIME));
 	}
 
 	public void Interrupt()
 	{
 		_state = CharacterState.Roaming;
-		GetComponent<SpriteRenderer>().color = Color.white;
+		_spriteRenderer.sprite = _sprite;
 		if (_eatDaPoopooCoroutine != null)
 		{
 			StopCoroutine(_eatDaPoopooCoroutine);
@@ -155,6 +166,8 @@ public class Character : MonoBehaviour
 	{
 		while (_state == CharacterState.Mining && poopoo != null && poopoo.PooGold > 0)
 		{
+
+
 			yield return new WaitForSeconds(chompTime);
 			poopoo.PooGold--;
 			UIManager.Instance.UpdateScore(_controller, 1);
@@ -166,6 +179,8 @@ public class Character : MonoBehaviour
 			
 			// EAT POOPOO ANIMATION GETS TRIGGERED HERE
 		}
+
+		GetComponent<Animator>().Play("Idle");
 
 		Interrupt();
 	}

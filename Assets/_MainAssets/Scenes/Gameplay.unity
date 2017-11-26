@@ -470,6 +470,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: dac4fb0aaef9ca74694160ce33e867ac, type: 3}
   - {fileID: 21300000, guid: 05df2440673ddc845a533a80a122b004, type: 3}
   - {fileID: 21300000, guid: 376da2d825e015048920cab8e0d2a4fb, type: 3}
+  _deadCharacterSprites:
+  - {fileID: 21300000, guid: 78241d8d8e2a25d4ebc455621a35382e, type: 3}
+  - {fileID: 21300000, guid: a88b9f112d1bba847865a2822e8e5519, type: 3}
+  - {fileID: 21300000, guid: 3202804554f183842b9b02901d879fb2, type: 3}
+  - {fileID: 21300000, guid: 8370785a203f0f84186c8f7f22be3848, type: 3}
 --- !u!1 &1064328074
 GameObject:
   m_ObjectHideFlags: 0
