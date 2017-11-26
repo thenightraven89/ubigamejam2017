@@ -67,7 +67,7 @@ public class Character : MonoBehaviour
 
 				if (XCI.GetButtonDown(XboxButton.Y, _controller))
 				{
-					var hit = Physics2D.CircleCastAll(_t.position, 0.5f, Vector2.up);
+					var hit = Physics2D.CircleCastAll(_t.position, 0.5f, Vector2.up, 0.5f, 1 << LayerMask.NameToLayer("Poopoo"));
 					if (hit.Length > 0)
 					{
 						EatDaPoopoo(hit[0]);

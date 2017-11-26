@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212178324137679854}
   - component: {fileID: 114415914650141160}
   - component: {fileID: 58478619857940884}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GoldPoo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
