@@ -220,6 +220,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 673fa23a6600bd94692f61f992a5b83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBeingDeceived: 0
+  yodo: 0
 --- !u!114 &114426734388258722
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -231,9 +233,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6109027fc98205c4898cdfc85b6bc780, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bearSpeed: 2
-  bearHasToPooSpeed: 4
-  bearChargeSpeed: 3.5
+  bearSpeed: 1.5
+  bearHasToPooSpeed: 2
+  bearChargeSpeed: 2
   bearReach: 1
   minDistanceBetweenPoos: 5
   maxPooCount: 5
@@ -257,6 +259,7 @@ MonoBehaviour:
   sRend: {fileID: 212032153116899700}
   colDet: {fileID: 114176438289456164}
   copilulubogdan: {fileID: 4811287769262280}
+  target: {fileID: 0}
 --- !u!212 &212032153116899700
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -290,7 +293,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 7
   m_Sprite: {fileID: 21300000, guid: 54d5a7e887b26734e80416d12062d97b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.528}
   m_FlipX: 0

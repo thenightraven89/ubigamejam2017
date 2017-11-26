@@ -27,6 +27,7 @@ public class BearController : MonoBehaviour
     //chase
     private Transform target;
     private bool isChasing = false;
+    private bool isBeingDeceived = false;
 
     //patrol vars
     private Vector3 patrolDest;
@@ -177,6 +178,8 @@ public class BearController : MonoBehaviour
     public int EvaluateCatch()
     {
         isChasing = false;
+        if (target.GetComponent<Character>().GetCharState == Character.CharacterState.Deceiving)
+            return 2;
         return 0; //always molests for now
     }
 
@@ -198,7 +201,11 @@ public class BearController : MonoBehaviour
     private void HandlePlayerSpotted(Collider2D col)
     {
         if (isChasing)
+        {
+            if (col.GetComponent<Character>().GetCharState == Character.CharacterState.Deceiving)
+                isBeingDeceived = true;
             return;
+        }
         target = col.transform;
         bsm.SendInterrupt(BearStateMachine.PLAYER_SPOTTED);
     }
