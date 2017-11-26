@@ -34,6 +34,8 @@ public class Character : MonoBehaviour
 
 	private Collider2D _collider;
 
+	public GameObject _stunEmoji;
+
     public CharacterState GetCharState
     {
         get { return _state; }
@@ -68,6 +70,7 @@ public class Character : MonoBehaviour
 				if (!_collider.enabled)
 				{
 					_collider.enabled = true;
+					_stunEmoji.SetActive(false);
 				}
 
 				if ((Mathf.Sign(_baseSpeed.x) != - Mathf.Sign(_t.localScale.x)) && _baseSpeed.x != 0f)
@@ -138,7 +141,8 @@ public class Character : MonoBehaviour
 				if (_stunTime == 0f)
 				{
 					_state = CharacterState.Roaming;
-					GetComponent<Collider2D>().enabled = true;
+					_collider.enabled = true;
+					_stunEmoji.SetActive(false);
 				}
 
 				_t.Translate(_pushedSpeed);
@@ -186,10 +190,11 @@ public class Character : MonoBehaviour
 
 	public void ReceiveStun(float duration)
 	{
+		_stunEmoji.SetActive(true);
 		_state = CharacterState.Stunned;
 		_dashMultiplier = 1f;
 		_stunTime = duration;
-		GetComponent<Collider2D>().enabled = false;
+		_collider.enabled = false;
 	}
 
 	public void Deceive()
@@ -218,6 +223,8 @@ public class Character : MonoBehaviour
 		{
 			StopCoroutine(_eatDaPoopooCoroutine);
 		}
+
+		
 	}
 
 	private IEnumerator DashCoroutine(float decay, float cooldown)
