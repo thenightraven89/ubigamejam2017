@@ -17,6 +17,9 @@ public class BearController : MonoBehaviour
     [Header("Bear stuff but this time it's references")]
     public GoldPoo goldPooPrefab;
     public ConeContoller coneController;
+    public Animator bearAnimator;
+    public Animator emojiAnimator;
+    public Animator angryAnim;
 
     //poos
     private List<GoldPoo> pooList;
@@ -76,7 +79,8 @@ public class BearController : MonoBehaviour
     public void Reset()
     {
         //reset variables
-        pooList = new List<GoldPoo>();        
+        pooList = new List<GoldPoo>();
+        angryAnim.gameObject.SetActive(false);
     }
 
     public void MakeBearAware()
@@ -149,11 +153,13 @@ public class BearController : MonoBehaviour
         GoldPoo pooTemp = Instantiate(goldPooPrefab, transform.position,Quaternion.identity);
         pooList.Add(pooTemp);
         currentPooCd = 0;
+        bearAnimator.Play("SpawnPoo");
     }
 
     public void LookConcerned()
     {
         currentPooCd++;
+        emojiAnimator.gameObject.SetActive(false);
         print("<color=#DFEC00C6>looking concerned:</color> " + currentPooCd);        
     }
 
@@ -161,6 +167,7 @@ public class BearController : MonoBehaviour
     public void StartChase()
     {
         Debug.Log("starting chase");
+        angryAnim.gameObject.SetActive(true);
     }
 
     public bool Chase()
@@ -179,8 +186,14 @@ public class BearController : MonoBehaviour
     {
         isChasing = false;
         if (target.GetComponent<Character>().GetCharState == Character.CharacterState.Deceiving)
+        {
+            angryAnim.gameObject.SetActive(false);
+            emojiAnimator.gameObject.SetActive(true);
+            
             return 2;
-        return 0; //always molests for now
+
+        }
+        return 0; 
     }
 
     //molest
