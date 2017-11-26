@@ -20,6 +20,7 @@ public class BearController : MonoBehaviour
     public Animator bearAnimator;
     public Animator emojiAnimator;
     public Animator angryAnim;
+    public Animator dustStorm;
 
     //poos
     private List<GoldPoo> pooList;
@@ -101,6 +102,7 @@ public class BearController : MonoBehaviour
 
     public void GetPatrolPoint()
     {
+        dustStorm.gameObject.SetActive(false);
         coneController.EnableCone();
         initPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         patrolDest = ls.GetValidPosForBearPatrol();
@@ -118,6 +120,7 @@ public class BearController : MonoBehaviour
 
     public void GetPooPoint()
     {
+        dustStorm.gameObject.SetActive(false);
         coneController.EnableCone();
         initPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         float dist = 0f;
@@ -210,6 +213,7 @@ public class BearController : MonoBehaviour
         Debug.Log("molesting target player");
         coneController.DisableCone();
         target.gameObject.SendMessage("ReceiveStun", 10f);
+        dustStorm.gameObject.SetActive(true);
     }
 
     //callbacks
