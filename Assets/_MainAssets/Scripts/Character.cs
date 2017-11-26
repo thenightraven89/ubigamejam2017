@@ -32,6 +32,8 @@ public class Character : MonoBehaviour
 
 	private AudioSource _source;
 
+	private Collider2D _collider;
+
     public CharacterState GetCharState
     {
         get { return _state; }
@@ -48,6 +50,7 @@ public class Character : MonoBehaviour
 		_state = CharacterState.Roaming;
 		GetComponent<Animator>().Play("Idle");
 		_source = FindObjectOfType<AudioSource>();
+		_collider = GetComponent<Collider2D>();
 	}
 
 	void Update()
@@ -62,6 +65,10 @@ public class Character : MonoBehaviour
 		{
 			case CharacterState.Roaming:
 
+				if (!_collider.enabled)
+				{
+					_collider.enabled = true;
+				}
 
 				if ((Mathf.Sign(_baseSpeed.x) != - Mathf.Sign(_t.localScale.x)) && _baseSpeed.x != 0f)
 				{

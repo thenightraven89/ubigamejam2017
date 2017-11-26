@@ -44,9 +44,13 @@ public class BearController : MonoBehaviour
 
     private BearStateMachine bsm;
     private bool isBsmInit = false;
-    // Use this for initialization
+	// Use this for initialization
+
+	private AudioSource _source;
+
     void Awake()
     {
+		_source = FindObjectOfType<AudioSource>();
         bsm = new BearStateMachine();
         Reset();
         ls = FindObjectOfType<LevelScript>();
@@ -147,8 +151,12 @@ public class BearController : MonoBehaviour
         if (transform.position == pooDest) return true;
         return false;
     }
+
+	public AudioClip _poopAudio;
+
     public void PoopGold()
     {
+		_source.PlayOneShot(_poopAudio);	
         print("<color=#DFEC00C6>pooping gold</color>");
         GoldPoo pooTemp = Instantiate(goldPooPrefab, transform.position,Quaternion.identity);
         pooList.Add(pooTemp);

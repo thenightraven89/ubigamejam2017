@@ -507,6 +507,7 @@ MonoBehaviour:
   bearAnimator: {fileID: 95737356359655814}
   emojiAnimator: {fileID: 95516152427017682}
   angryAnim: {fileID: 95644568219626008}
+  _poopAudio: {fileID: 8300000, guid: dec9f24f8e18f364db07e84c65e15f1c, type: 3}
 --- !u!114 &114585934800639492
 MonoBehaviour:
   m_ObjectHideFlags: 1
