@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour {
 			}
 		}
 		
-		if (sortedScores[0] >= 3)
+		if (sortedScores[0] >= 30)
 		{
 			_isFinished = true;
 			ShowGameOverScreen(sortedWinners[0]);
