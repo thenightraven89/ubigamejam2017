@@ -135,6 +135,26 @@ public class Character : MonoBehaviour
 			default:
 				break;
 		}
+
+		if (_t.position.x < -9)
+		{
+			_t.position = new Vector3(-9, _t.position.y, _t.position.z);
+		}
+
+		if (_t.position.x > 9)
+		{
+			_t.position = new Vector3(9, _t.position.y, _t.position.z);
+		}
+
+		if (_t.position.y < -4.5)
+		{
+			_t.position = new Vector3(_t.position.x, -4.5f, _t.position.z);
+		}
+
+		if (_t.position.y > 4.5)
+		{
+			_t.position = new Vector3(_t.position.x, 4.5f, _t.position.z);
+		}
 	}
 
 	public void Dash(float decay, float cooldown)
