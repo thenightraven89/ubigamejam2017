@@ -10,6 +10,7 @@ public class Character : MonoBehaviour
 	private Transform _t;
 	private Vector2 _baseSpeed;
 	private CharacterState _state;
+	private float _stunTime;
 
 	private const float DASH_COOLDOWN = 0.5f;
 	private const float DASH_MULTIPLIER_MAX = 3f;
@@ -96,6 +97,15 @@ public class Character : MonoBehaviour
 				}
 				break;
 
+			case CharacterState.Stunned:
+				_stunTime = Mathf.Clamp(_stunTime - Time.deltaTime, 0f, _stunTime);
+				if (_stunTime == 0f)
+				{
+					_state = CharacterState.Roaming;
+					GetComponent<Collider>().enabled = true;
+				}
+				break;
+
 			default:
 				break;
 		}
@@ -107,11 +117,12 @@ public class Character : MonoBehaviour
 		StartCoroutine(DashCoroutine(DASH_DECAY, DASH_COOLDOWN));
 	}
 
-	public void Stun(float duration)
+	public void ReceiveStun(float duration)
 	{
 		_state = CharacterState.Stunned;
 		_dashMultiplier = 1f;
-		StartCoroutine(StunCoroutine(duration));
+		_stunTime = duration;
+		GetComponent<Collider>().enabled = false;
 	}
 
 	public void Deceive()
@@ -153,12 +164,6 @@ public class Character : MonoBehaviour
 			t += Time.deltaTime;
 		}
 		yield return new WaitForSeconds(cooldown);
-		_state = CharacterState.Roaming;
-	}
-
-	private IEnumerator StunCoroutine(float duration)
-	{
-		yield return new WaitForSeconds(duration);
 		_state = CharacterState.Roaming;
 	}
 
