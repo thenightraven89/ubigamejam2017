@@ -31,7 +31,7 @@ public class GameMaster : MonoBehaviour
 
 	private void Update()
 	{
-		if (XCI.GetButtonDown(XboxButton.Start, XboxController.Any))
+		if (XCI.GetButtonDown(XboxButton.Start, XboxController.Any) && _characters.Count >= 2)
 		{
 			StartGame();
 		}
