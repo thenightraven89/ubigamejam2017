@@ -23,7 +23,7 @@ public class StartState : BearState
     {
         base.EnterState();
         bear.Reset();
-        bsm.SwitchState(bsm.patrolState);
+        bsm.SwitchState(bsm.travelToPooPlaceState);
     }
 }
 
@@ -108,7 +108,7 @@ public class PoopGoldState : BearState
         stateDurationProgress += Time.deltaTime;
         if (stateDurationProgress >= stateDuration)
         {
-            bsm.SwitchState(bsm.patrolState);
+            bsm.SwitchState(bsm.travelToPooPlaceState);
         }
     }
 }
